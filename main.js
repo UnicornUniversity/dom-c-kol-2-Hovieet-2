@@ -18,44 +18,56 @@ Ošetření chyb:
 Užijte si používání této jednoduché kalkulačky!
 */
 
-/* Funkce pro převod dekadického čísla na binární */
-function decToBin(number) {
+console.log("Program se spouští...");
+
+/* Načtení modulu pro práci se vstupem z konzole */
+const readline = require("readline");
+
+/* Vytvoření rozhraní pro čtení a zápis v konzoli */
+const rl = readline.createInterface({
+  input: process.stdin,
+  output: process.stdout,
+});
+
+/* 
+Funkce pro převod dekadického čísla na binární:
+- Pokud je číslo 0, vrací "0"
+- Pokud je číslo záporné, vrací chybovou hlášku
+- Jinak provádí převod pomocí dělení dvěma
+*/
+export function decToBin(number) {
   if (number === 0) return "0";
   if (number < 0) return "Zadej kladné číslo!";
 
   let binary = "";
 
+  /* Opakované dělení čísla dvěma a skládání zbytku */
   while (number > 0) {
-    binary = (number % 2) + binary;
+    let remainder = number % 2;
+    binary = remainder + binary;
     number = Math.floor(number / 2);
   }
 
   return binary;
 }
 
-/* Export pro testy (CommonJS) */
-module.exports = { decToBin };
+/* 
+Dotaz na uživatele:
+- Načte vstup z konzole
+- Pokusí se ho převést na číslo
+- Zkontroluje platnost vstupu
+*/
+rl.question("Zadej dekadické číslo: ", (input) => {
+  let number = parseInt(input);
 
-/* Spustí se jen při ručním spuštění */
-if (require.main === module) {
-  const readline = require("readline");
+  /* Kontrola, zda je vstup číslo */
+  if (isNaN(number)) {
+    console.log("To není číslo!");
+  } else {
+    /* Výpis převedeného binárního čísla */
+    console.log("Binární číslo:", decToBin(number));
+  }
 
-  const rl = readline.createInterface({
-    input: process.stdin,
-    output: process.stdout,
-  });
-
-  console.log("Program se spouští...");
-
-  rl.question("Zadej dekadické číslo: ", (input) => {
-    const number = parseInt(input);
-
-    if (isNaN(number)) {
-      console.log("To není číslo!");
-    } else {
-      console.log("Binární číslo:", decToBin(number));
-    }
-
-    rl.close();
-  });
-}
+  /* Ukončení rozhraní */
+  rl.close();
+});
