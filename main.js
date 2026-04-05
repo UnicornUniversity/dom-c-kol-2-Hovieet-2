@@ -20,28 +20,12 @@ Užijte si používání této jednoduché kalkulačky!
 
 console.log("Program se spouští...");
 
-/* Načtení modulu pro práci se vstupem z konzole */
-const readline = require("readline");
-
-/* Vytvoření rozhraní pro čtení a zápis v konzoli */
-const rl = readline.createInterface({
-  input: process.stdin,
-  output: process.stdout,
-});
-
-/* 
-Funkce pro převod dekadického čísla na binární:
-- Pokud je číslo 0, vrací "0"
-- Pokud je číslo záporné, vrací chybovou hlášku
-- Jinak provádí převod pomocí dělení dvěma
-*/
-export function decToBin(number) {
+function decToBin(number) {
   if (number === 0) return "0";
   if (number < 0) return "Zadej kladné číslo!";
 
   let binary = "";
 
-  /* Opakované dělení čísla dvěma a skládání zbytku */
   while (number > 0) {
     let remainder = number % 2;
     binary = remainder + binary;
@@ -51,23 +35,25 @@ export function decToBin(number) {
   return binary;
 }
 
-/* 
-Dotaz na uživatele:
-- Načte vstup z konzole
-- Pokusí se ho převést na číslo
-- Zkontroluje platnost vstupu
-*/
-rl.question("Zadej dekadické číslo: ", (input) => {
-  let number = parseInt(input);
+module.exports = { decToBin };
 
-  /* Kontrola, zda je vstup číslo */
-  if (isNaN(number)) {
-    console.log("To není číslo!");
-  } else {
-    /* Výpis převedeného binárního čísla */
-    console.log("Binární číslo:", decToBin(number));
-  }
+if (require.main === module) {
+  const readline = require("readline");
 
-  /* Ukončení rozhraní */
-  rl.close();
-});
+  const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout,
+  });
+
+  rl.question("Zadej dekadické číslo: ", (input) => {
+    let number = parseInt(input);
+
+    if (isNaN(number)) {
+      console.log("To není číslo!");
+    } else {
+      console.log("Binární číslo:", decToBin(number));
+    }
+
+    rl.close();
+  });
+}
